@@ -29,5 +29,17 @@ pipeline {
                 sh 'docker build -t jenkins-prod-lab:v1 .'
             }
         }
+
+        stage('Deploy') {
+            steps {
+                sh '''
+                    docker rm -f jenkins-prod-lab || true
+                    docker run -d \
+                        --name jenkins-prod-lab \
+                        -p 8080:80 \
+                        jenkins-prod-lab:v1
+                '''
+            }
+        }
     }
 }
